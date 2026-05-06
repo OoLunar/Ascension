@@ -9,6 +9,4 @@ dependencies {
         // v2
         exclude module: 'slf4j-api'
     }
-
-    compileOnly(libs.carbonchat)
 }

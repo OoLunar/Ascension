@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.discordsrv.bukkit.integration.chat;
+package com.discordsrv.common.integration.chat;
 
 import com.discordsrv.api.channel.GameChannel;
 import com.discordsrv.api.component.MinecraftComponent;
@@ -25,8 +25,8 @@ import com.discordsrv.api.events.channel.GameChannelLookupEvent;
 import com.discordsrv.api.events.message.preprocess.game.GameChatMessagePreProcessEvent;
 import com.discordsrv.api.placeholder.annotation.Placeholder;
 import com.discordsrv.api.player.DiscordSRVPlayer;
-import com.discordsrv.bukkit.BukkitDiscordSRV;
-import com.discordsrv.bukkit.player.BukkitPlayer;
+import com.discordsrv.common.DiscordSRV;
+import com.discordsrv.common.abstraction.player.IPlayer;
 import com.discordsrv.common.core.logging.NamedLogger;
 import com.discordsrv.common.core.module.type.PluginIntegration;
 import net.draycia.carbon.api.CarbonChat;
@@ -44,10 +44,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CarbonChatIntegration extends PluginIntegration<BukkitDiscordSRV> {
+public class CarbonChatIntegration extends PluginIntegration<DiscordSRV> {
     private CarbonEventSubscription<CarbonChatEvent> chatSubscription;
 
-    public CarbonChatIntegration(BukkitDiscordSRV discordSRV) {
+    public CarbonChatIntegration(DiscordSRV discordSRV) {
         super(discordSRV, new NamedLogger(discordSRV, "CARBONCHAT"));
     }
 
@@ -86,15 +86,15 @@ public class CarbonChatIntegration extends PluginIntegration<BukkitDiscordSRV> {
                 return;
             }
 
-            BukkitPlayer srvPlayer = discordSRV.playerProvider().player(sender.uuid());
+            IPlayer srvPlayer = discordSRV.playerProvider().player(sender.uuid());
             if (srvPlayer == null) {
                 return;
             }
 
             MinecraftComponent component = CarbonChatKeyHelper.message(event);
             discordSRV.scheduler().run(() -> discordSRV.eventBus().publish(
-                    new GameChatMessagePreProcessEvent(null, srvPlayer, component, new CarbonGameChannel(chatChannel),
-                            false)));
+                    new GameChatMessagePreProcessEvent(event, srvPlayer, component, new CarbonGameChannel(chatChannel), event.cancelled())
+            ));
         });
     }
 
@@ -174,7 +174,7 @@ public class CarbonChatIntegration extends PluginIntegration<BukkitDiscordSRV> {
                     continue;
                 }
 
-                BukkitPlayer srvPlayer = discordSRV.playerProvider().player(carbonPlayer.uuid());
+                IPlayer srvPlayer = discordSRV.playerProvider().player(carbonPlayer.uuid());
                 if (srvPlayer != null) {
                     players.add(srvPlayer);
                 }

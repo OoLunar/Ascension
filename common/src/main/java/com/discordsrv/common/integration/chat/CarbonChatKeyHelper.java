@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.discordsrv.bukkit.integration.chat;
+package com.discordsrv.common.integration.chat;
 
 import com.discordsrv.api.component.MinecraftComponent;
 import com.discordsrv.unrelocate.net.kyori.adventure.key.Key;

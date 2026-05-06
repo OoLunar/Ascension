@@ -140,7 +140,6 @@ public class BukkitDiscordSRVImpl extends BukkitDiscordSRV {
 
         if (PaperComponentCheck.IS_AVAILABLE) {
             // Paper (Since 1.16)
-            registerIntegration("com.discordsrv.bukkit.integration.chat.CarbonChatIntegration");
             registerModule(PaperChatListener::new);
             registerModule(PaperDeathListener::new);
             registerModule(PaperJoinListener::new);
